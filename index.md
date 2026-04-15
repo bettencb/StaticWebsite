@@ -1,11 +1,11 @@
 ---
 layout: default
 title: Home
-background_image: /assets/images/background-home.jpg
+background_image: /assets/background-home.jpg
 ---
 
 # Welcome to the Site
 
 This is the main landing page. Jekyll will inject this content into your main layout.
 
-![Random Image]({{ site.baseurl }}/assets/images/random-1.jpg)
+![Random Image]({{ site.baseurl }}/assets/random-1.jpg)

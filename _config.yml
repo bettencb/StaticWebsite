@@ -1,6 +1,6 @@
 title: My Site
 description: A simple Jekyll static site
-baseurl: ""
-url: ""
+baseurl: "/StaticWebsite"
+url: "https://bettencb.github.io"
 
 markdown: kramdown
