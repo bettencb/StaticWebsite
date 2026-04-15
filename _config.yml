@@ -1,0 +1,6 @@
+title: My Site
+description: A simple Jekyll static site
+baseurl: ""
+url: ""
+
+markdown: kramdown

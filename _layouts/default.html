@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ page.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+
+    <style>
+      body {
+        {% if page.background_image %}
+          background: url("{{ page.background_image | relative_url }}") no-repeat center center fixed;
+          background-size: cover;
+        {% else %}
+          background-color: #ffffff; 
+        {% endif %}
+      }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="{{ '/' | relative_url }}">Home</a>
+        <a href="{{ '/bio' | relative_url }}">Bio</a>
+    </nav>
+
+    <main>
+        {{ content }} </main>
+
+</body>
+</html>
