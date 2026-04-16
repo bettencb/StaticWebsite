@@ -15,4 +15,4 @@ title: About Me
 
 ### Gallery
 Here is a random photo from my trip to the zoo:
-![Zoo Monkey]({{ site.baseurl }}/assets/images/random-1.jpg)
+![Zoo Monkey]({{ site.baseurl }}/assets/images/random-2.jpg)

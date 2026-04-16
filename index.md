@@ -8,4 +8,4 @@ background_image: /assets/images/background-home.jpg
 
 This is the main landing page. Here you should have some sort of welcome description or instructions on where they're at and how to navigate.
 
-![Random Image]({{ site.baseurl }}/assets/images/random-2.jpg)
+![Random Image]({{ site.baseurl }}/assets/images/random-1.jpg)
