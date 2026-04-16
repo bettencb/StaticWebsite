@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About Me
-background_image: /assets/images/background-home.jpg
+background_image: /assets/images/background-bio.jpg
 ---
 
 # About Me
