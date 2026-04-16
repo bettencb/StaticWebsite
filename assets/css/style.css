@@ -8,8 +8,12 @@ h1 {
   font-family: 'Playfair Display', serif;
 }
 
+h3 {
+  font-family: 'Montserrat', sans-serif;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Merriweather', serif;
   line-height: 1.6;
   color: #333;
 }
@@ -54,4 +58,16 @@ main {
 img {
   max-width: 100%;
   height: auto;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+footer {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1rem;
+  text-align: center;
+  color: #fff;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
