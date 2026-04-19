@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About Me
-background_image: /assets/images/background-bio.jpg
+background_image: /assets/images/background-bio.webp
 ---
 
 # About Me
@@ -16,4 +16,4 @@ background_image: /assets/images/background-bio.jpg
 
 ### Gallery
 Here is a random photo from my trip to the zoo:
-![Zoo Monkey]({{ site.baseurl }}/assets/images/random-2.jpg)
+![Zoo Monkey]({{ site.baseurl }}/assets/images/random-2.webp)
