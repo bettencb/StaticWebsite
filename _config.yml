@@ -1,6 +1,6 @@
 title: My Test Site
 description: A demonstration of a static website using Jekyll
-baseurl: "/StaticWebsite"
-url: "https://bettencb.github.io"
+baseurl: ""
+url: "https://www.bettencourt.dev"
 
 markdown: kramdown
