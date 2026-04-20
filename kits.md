@@ -18,7 +18,7 @@ title: Bundle Sales Page
     <p>Step up your game with additional tools and expanded resources.</p>
   </div>
   <div class="card">
-    <img src="{{ '/assets/images/SuperstitionMountain.png' | relative_url }}" alt="Pro Kit">
+    <img src="{{ '/assets/images/random-1.webp' | relative_url }}" alt="Pro Kit">
     <h3>Pro</h3>
     <p>The complete package with everything included for the serious enthusiast.</p>
   </div>
