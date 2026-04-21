@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About Me
-background_image: /assets/images/background-bio.webp
+background_image: /assets/images/background-bio_scaled.webp
 ---
 
 # About Me

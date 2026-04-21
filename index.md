@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Home
-background_image: /assets/images/background-home.webp
+background_image: /assets/images/background-home_scaled.webp
 ---
 
 # Welcome to the Site
