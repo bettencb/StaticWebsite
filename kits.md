@@ -24,3 +24,53 @@ title: Bundle Sales Page
   </div>
 </div>
 
+<div class="carousel-section">
+  <h2>Featured Picks</h2>
+  <div class="carousel">
+    <button class="carousel-btn prev" aria-label="Previous">&#8249;</button>
+    <div class="carousel-track">
+      <div class="carousel-card">
+        <img src="{{ '/assets/images/random-1_thumbnail.webp' | relative_url }}" alt="Starter Pick">
+        <h3>Starter Pick</h3>
+        <p>Handpicked essentials for those just beginning their journey.</p>
+      </div>
+      <div class="carousel-card">
+        <img src="{{ '/assets/images/random-2_thumbnail.webp' | relative_url }}" alt="Explorer Pick">
+        <h3>Explorer Pick</h3>
+        <p>Curated selections for adventurers ready to level up.</p>
+      </div>
+      <div class="carousel-card">
+        <img src="{{ '/assets/images/random-1_thumbnail.webp' | relative_url }}" alt="Expert Pick">
+        <h3>Expert Pick</h3>
+        <p>Premium choices for seasoned enthusiasts who want the best.</p>
+      </div>
+    </div>
+    <button class="carousel-btn next" aria-label="Next">&#8250;</button>
+  </div>
+</div>
+
+<script>
+  const track = document.querySelector('.carousel-track');
+  const cards = document.querySelectorAll('.carousel-card');
+  const prevBtn = document.querySelector('.carousel-btn.prev');
+  const nextBtn = document.querySelector('.carousel-btn.next');
+  let current = 0;
+
+  function showCard(index) {
+    cards.forEach((card, i) => {
+      card.classList.toggle('active', i === index);
+    });
+  }
+
+  prevBtn.addEventListener('click', () => {
+    current = (current - 1 + cards.length) % cards.length;
+    showCard(current);
+  });
+
+  nextBtn.addEventListener('click', () => {
+    current = (current + 1) % cards.length;
+    showCard(current);
+  });
+
+  showCard(current);
+</script>
