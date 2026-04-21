@@ -16,4 +16,4 @@ background_image: /assets/images/background-bio_scaled.webp
 
 ### Gallery
 Here is an example of a high quality photo scaled down for faster load times:
-![Zoo Monkey]({{ site.baseurl }}/assets/images/random-2_scaled.webp)
+![Zoo Monkey]({{ site.baseurl }}/assets/images/random-3.webp)

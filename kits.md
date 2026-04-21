@@ -18,7 +18,7 @@ title: Bundle Sales Page
     <p>Step up your game with additional tools and expanded resources.</p>
   </div>
   <div class="card">
-    <img src="{{ '/assets/images/random-1_thumbnail.webp' | relative_url }}" alt="Pro Kit">
+    <img src="{{ '/assets/images/random-3_thumbnail.webp' | relative_url }}" alt="Pro Kit">
     <h3>Pro</h3>
     <p>The complete package with everything included for the serious enthusiast.</p>
   </div>
@@ -40,7 +40,7 @@ title: Bundle Sales Page
         <p>Curated selections for adventurers ready to level up.</p>
       </div>
       <div class="carousel-card">
-        <img src="{{ '/assets/images/random-1_thumbnail.webp' | relative_url }}" alt="Expert Pick">
+        <img src="{{ '/assets/images/random-3_thumbnail.webp' | relative_url }}" alt="Expert Pick">
         <h3>Expert Pick</h3>
         <p>Premium choices for seasoned enthusiasts who want the best.</p>
       </div>
