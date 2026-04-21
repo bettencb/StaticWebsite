@@ -7,7 +7,7 @@ background_image: /assets/images/background-bio.webp
 # About Me
 
 <div class="bio-container">
-  <img src="{{ site.baseurl }}/assets/images/bio-pic.png" alt="Ashton" class="bio-photo">
+  <img src="{{ site.baseurl }}/assets/images/bio-pic_scaled.png" alt="Ashton" class="bio-photo">
   <p>
     This is where the biography text goes. Since this is a static site,
     it loads instantly!
@@ -16,4 +16,4 @@ background_image: /assets/images/background-bio.webp
 
 ### Gallery
 Here is a random photo from my trip to the zoo:
-![Zoo Monkey]({{ site.baseurl }}/assets/images/random-2.webp)
+![Zoo Monkey]({{ site.baseurl }}/assets/images/random-2_scaled.webp)
