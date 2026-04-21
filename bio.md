@@ -15,5 +15,5 @@ background_image: /assets/images/background-bio.webp
 </div>
 
 ### Gallery
-Here is a random photo from my trip to the zoo:
+Here is an example of a high quality photo scaled down for faster load times:
 ![Zoo Monkey]({{ site.baseurl }}/assets/images/random-2_scaled.webp)
