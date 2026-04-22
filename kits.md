@@ -82,25 +82,25 @@ title: Bundle Sales Page
   <div class="lead-form-grid">
     <div class="form-field">
       <label for="first-name">First Name</label>
-      <input id="first-name" name="first_name" type="text" required>
+      <input id="first-name" name="first_name" type="text" placeholder="Enter your first name." required>
     </div>
 
     <div class="form-field">
       <label for="last-name">Last Name</label>
-      <input id="last-name" name="last_name" type="text" required>
+      <input id="last-name" name="last_name" type="text" placeholder="Enter your last name." required>
     </div>
 
     <div class="form-field">
       <label for="phone">Phone Number</label>
-      <input id="phone" name="phone" type="tel" required>
+      <input id="phone" name="phone" type="tel" placeholder="Enter your phone number." required>
     </div>
 
     <div class="form-field">
       <label for="email">Email</label>
-      <input id="email" name="email" type="email" required>
+      <input id="email" name="email" type="email" placeholder="example@email.com" required>
     </div>
 
-    <div class="form-field form-field-full">
+    <div class="form-field">
       <label for="best-contact">Best Way To Contact</label>
       <select id="best-contact" name="best_contact" required>
         <option value="" selected disabled>Select one</option>
@@ -110,9 +110,16 @@ title: Bundle Sales Page
       </select>
     </div>
 
-    <div class="form-field form-field-full">
-      <label for="message">Tell Me Your Website Idea</label>
-      <input id="message" name="message" type="message" required>
+    <div class="fs-field col-span-full">
+      <label class="fs-label" for="interest-reason">
+        What's Your Website Idea?
+      </label>
+      <textarea
+        class="fs-textarea"
+        id="interest-reason"
+        name="interest-reason"
+        placeholder="Tell us you website idea you want made. (optional)"
+      ></textarea>
     </div>
   </div>
 
