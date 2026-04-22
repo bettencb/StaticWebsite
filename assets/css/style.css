@@ -276,6 +276,27 @@ footer {
   background: #111;
 }
 
+textarea {
+  font-family: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+.fs-label {
+  color: var(--color-text-default);
+  display: block;
+  font-family: var(--font-family-display);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+}
+
 @media (max-width: 700px) {
   .lead-form-grid {
     grid-template-columns: 1fr;
