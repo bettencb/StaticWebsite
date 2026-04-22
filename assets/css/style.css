@@ -288,15 +288,6 @@ textarea {
   padding: 0;
 }
 
-.fs-label {
-  color: var(--color-text-default);
-  display: block;
-  font-family: var(--font-family-display);
-  font-size: 0.875rem;
-  font-weight: 500;
-  line-height: 1.25rem;
-}
-
 @media (max-width: 700px) {
   .lead-form-grid {
     grid-template-columns: 1fr;

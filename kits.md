@@ -110,7 +110,7 @@ title: Bundle Sales Page
       </select>
     </div>
 
-    <div class="fs-field col-span-full">
+    <div class="form-field">
       <label class="fs-label" for="interest-reason">
         What's Your Website Idea?
       </label>
