@@ -74,3 +74,43 @@ title: Bundle Sales Page
 
   showCard(current);
 </script>
+
+
+### Interested?
+
+<form class="lead-form" action="https://formspree.io/f/xeevrpdy" method="POST">
+  <div class="lead-form-grid">
+    <div class="form-field">
+      <label for="first-name">First Name</label>
+      <input id="first-name" name="first_name" type="text" required>
+    </div>
+
+    <div class="form-field">
+      <label for="last-name">Last Name</label>
+      <input id="last-name" name="last_name" type="text" required>
+    </div>
+
+    <div class="form-field">
+      <label for="phone">Phone Number</label>
+      <input id="phone" name="phone" type="tel" required>
+    </div>
+
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" required>
+    </div>
+
+    <div class="form-field form-field-full">
+      <label for="best-contact">Best Way To Contact</label>
+      <select id="best-contact" name="best_contact" required>
+        <option value="" selected disabled>Select one</option>
+        <option value="phone">Phone</option>
+        <option value="email">Email</option>
+        <option value="text">Text</option>
+      </select>
+    </div>
+  </div>
+
+  <button class="form-submit" type="submit">Submit</button>
+</form>
+
