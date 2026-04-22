@@ -110,8 +110,8 @@ title: Bundle Sales Page
       </select>
     </div>
 
-    <div class="form-field">
-      <label for="message">Tell me your website idea.</label>
+    <div class="form-field form-field-full">
+      <label for="message">Tell Me Your Website Idea</label>
       <input id="message" name="message" type="message" required>
     </div>
   </div>
