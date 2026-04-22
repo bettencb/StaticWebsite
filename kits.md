@@ -109,6 +109,11 @@ title: Bundle Sales Page
         <option value="text">Text</option>
       </select>
     </div>
+
+    <div class="form-field">
+      <label for="message">Tell me your website idea.</label>
+      <input id="message" name="message" type="message" required>
+    </div>
   </div>
 
   <button class="form-submit" type="submit">Submit</button>
