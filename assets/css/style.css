@@ -55,35 +55,6 @@ main {
   border-radius: 8px;
 }
 
-/* ========================================= */
-/* OVERLAY STYLES FOR KIT-CONTAINER          */
-/* ========================================= */
-
-/* The kit container needs fixed positioning to stay over other content */
-.kit-container {
-    position: fixed; /* Takes it out of the normal document flow */
-    top: 0;          /* Sticks it to the very top edge */
-    left: 0;         /* Starts at the left edge */
-    width: 100%;     /* Spans the entire width of the viewport */
-    z-index: 1000;   /* High z-index ensures it is above nav and main content */
-    padding: 15px 20px; /* Add some internal spacing */
-    background: rgba(0, 0, 0, 0.8); /* Use a semi-transparent background so text is readable */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional: gives it lift */
-    /* Add any specific layout properties you need here (e.g., display: flex) */
-}
-
-/* Optional: If you want the kit container content to look good, adjust its layout */
-.kit-container {
-    display: flex;
-    align-items: center; /* Vertically centers items */
-    justify-content: center; /* Horizontally centers items (or space them out) */
-}
-
-/* Keep your existing styles for the images and internal components */
-.drone-photo {
-    max-width:
-
-
 img {
   max-width: 100%;
   height: auto;
