@@ -55,6 +55,18 @@ main {
   border-radius: 8px;
 }
 
+.kit-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+
+.drone-photo {
+  max-width: 200px;
+  border-radius: 8px;
+}
+
 img {
   max-width: 100%;
   height: auto;

@@ -2,8 +2,13 @@
 layout: default
 title: Bundle Sales Page 
 ---
+
+<div class="kit-container">
+  <img src="{{ site.baseurl }}/assets/images/gemini_emblem.png" alt="drone emblem" class="drone-photo">
+</div>
+
 <div class="banner">
-  <h1>Bundle Sales Examples</h1>
+  <h1>Aerial Drone Photography</h1>
 </div>
 
 <div class="cards-container">
