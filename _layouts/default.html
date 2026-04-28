@@ -20,9 +20,14 @@
 <body>
 
     <nav>
+      <a class="nav-emblem" href="{{ '/' | relative_url }}" aria-label="Home">
+        <img src="{{ '/assets/images/hover_emblem.png' | relative_url }}" alt="Blaine Bettencourt emblem">
+      </a>
+      <div class="nav-links">
         <a href="{{ '/' | relative_url }}">Home</a>
         <a href="{{ '/kits' | relative_url }}">Kits</a>
         <a href="{{ '/bio' | relative_url }}">Bio</a>
+      </div>
     </nav>
 
     <main>

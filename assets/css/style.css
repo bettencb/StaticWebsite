@@ -22,17 +22,38 @@ nav {
   background: rgba(0, 0, 0, 0.7);
   padding: 1rem;
   text-align: center;
+  position: relative;
 }
 
-nav a {
+.nav-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav-links a {
   color: #fff;
   text-decoration: none;
-  margin: 0 1rem;
   font-size: 1.1rem;
 }
 
-nav a:hover {
+.nav-links a:hover {
   text-decoration: underline;
+}
+
+.nav-emblem {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-emblem img {
+  width: auto;
+  height: 44px;
+  margin: 0;
 }
 
 main {
@@ -289,6 +310,21 @@ textarea {
 }
 
 @media (max-width: 700px) {
+  nav {
+    padding-left: 3.25rem;
+    padding-right: 1rem;
+  }
+
+  .nav-links {
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .nav-emblem img {
+    height: 36px;
+  }
+
   .lead-form-grid {
     grid-template-columns: 1fr;
   }
