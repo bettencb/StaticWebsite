@@ -19,7 +19,7 @@ body {
 }
 
 nav {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.75);
   padding: 1rem;
   text-align: center;
   position: relative;
@@ -144,11 +144,29 @@ img {
   margin-bottom: 1.25rem;
 }
 
+.featured-media {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
 .carousel {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
+}
+
+.video-panel {
+  width: 420px;
+  max-width: 100%;
+  text-align: left;
+}
+
+.video-panel h3 {
+  margin-bottom: 0.75rem;
 }
 
 .carousel-track {
@@ -221,7 +239,7 @@ footer {
   position: relative;
   padding-bottom: 56.25%; /* 16:9 */
   height: 0;
-  margin: 1.5rem 0;
+  margin: 0;
   overflow: hidden;
   border-radius: 8px;
 }
@@ -323,6 +341,14 @@ textarea {
 
   .nav-emblem img {
     height: 36px;
+  }
+
+  .featured-media {
+    gap: 1.25rem;
+  }
+
+  .video-panel {
+    width: 100%;
   }
 
   .lead-form-grid {
