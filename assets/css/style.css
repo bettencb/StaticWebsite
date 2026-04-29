@@ -19,7 +19,7 @@ body {
 }
 
 nav {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(42, 57, 73, 0.7);
   padding: 1rem;
   text-align: center;
   position: relative;
@@ -58,9 +58,8 @@ nav {
 
 main {
   max-width: 1200px;
-  margin: 2rem auto;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(221, 238, 254, 0.37);
   border-radius: 8px;
 }
 
