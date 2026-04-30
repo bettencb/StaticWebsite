@@ -1,6 +1,6 @@
 ---
 layout: default
-title: About Me
+title: Contact
 background_image: /assets/images/background-bio_scaled.webp
 ---
 

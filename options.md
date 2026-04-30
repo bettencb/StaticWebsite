@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Bundle Sales Page 
+title: Options
 ---
 
 <div class="banner">
