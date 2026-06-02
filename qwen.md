@@ -2,7 +2,7 @@
 layout: page
 title: Drone Sales & Services
 subtitle: Revolutionizing Your Aerial Photography & Filming Needs
-hero_image: background-home.webp
+hero_image: /assets/images/background-home.webp
 ---
 
 # Drone Sales & Services
@@ -46,7 +46,7 @@ Ensure smooth operations with our post-flight support services. We offer mainten
 
 ---
 
-![Drone in Action](random-1.webp)
+![Drone in Action]({{ '/assets/images/random-1.webp' | relative_url }})
 
 ## Contact Us
 
