@@ -28,6 +28,14 @@ title: Secure Vault Breaker 3D
     </div>
 </div>
 
+<div id="pause-overlay">
+    <div id="pause-nav-wrapper">
+        {% include header.html %}
+    </div>
+    <div id="pause-title">&#9646;&#9646; PAUSED</div>
+    <button class="btn" onclick="resumeGame()">RESUME [ESC]</button>
+</div>
+
 <div id="victory-overlay">
     <div class="widget-container">
         <h2>ROOT ACCESS GRANTED</h2>
@@ -65,6 +73,8 @@ title: Secure Vault Breaker 3D
     let timerStarted = false;
     let gameFinished = false;
     let startTime = 0;
+    let pausedAt = 0;
+    let totalPausedMs = 0;
 
     const mapWidth = 20;
     const mapHeight = 20;
@@ -161,6 +171,11 @@ title: Secure Vault Breaker 3D
             timerStarted = true;
             startTime = performance.now();
         }
+        if (e.code === 'Escape') {
+            e.preventDefault();
+            if (gameState === 'EXPLORING') { pauseGame(); return; }
+            if (gameState === 'PAUSED')    { resumeGame(); return; }
+        }
         if (gameState === 'EXPLORING') {
             if (keys.hasOwnProperty(e.code)) keys[e.code] = true;
             if (e.code === 'Space' || e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
@@ -179,8 +194,8 @@ title: Secure Vault Breaker 3D
     });
 
     function getFacedBlock() {
-        let checkX = Math.floor(player.x + player.dirX * 1.5);
-        let checkY = Math.floor(player.y + player.dirY * 1.5);
+        let checkX = Math.floor(player.x + player.dirX * 1.25);
+        let checkY = Math.floor(player.y + player.dirY * 1.25);
         return {x: checkX, y: checkY};
     }
 
@@ -303,7 +318,7 @@ title: Secure Vault Breaker 3D
 
             if (hackedTerminals >= totalTerminals) {
                 gameFinished = true;
-                document.getElementById('final-time').innerText = formatTime(performance.now() - startTime);
+                document.getElementById('final-time').innerText = formatTime(performance.now() - startTime - totalPausedMs);
                 logArea.innerHTML += '<div class="log-entry" style="color:#ffd700; font-size:1.2em; margin-top:15px; font-weight:bold;">[!] ALL TERMINALS HACKED. MISSION ACCOMPLISHED.</div>';
                 setTimeout(showVictoryScreen, 1500);
             }
@@ -329,6 +344,22 @@ title: Secure Vault Breaker 3D
         gameState = 'VICTORY';
     }
 
+    function pauseGame() {
+        gameState = 'PAUSED';
+        pausedAt = performance.now();
+        keys.ArrowUp = keys.ArrowDown = keys.ArrowLeft = keys.ArrowRight = false;
+        document.getElementById('pause-overlay').style.display = 'flex';
+    }
+
+    function resumeGame() {
+        if (timerStarted && !gameFinished) {
+            totalPausedMs += performance.now() - pausedAt;
+        }
+        document.getElementById('pause-overlay').style.display = 'none';
+        gameState = 'EXPLORING';
+        canvas.focus();
+    }
+
     function closeVictory() {
         document.getElementById('victory-overlay').style.display = 'none';
         gameState = 'EXPLORING';
@@ -346,6 +377,7 @@ title: Secure Vault Breaker 3D
         hackedTerminals = 0;
         timerStarted = false;
         gameFinished = false;
+        totalPausedMs = 0;
         document.getElementById('time-val').innerText = "00:00";
         initMap();
         canvas.focus();
@@ -365,8 +397,8 @@ title: Secure Vault Breaker 3D
         if (isNaN(frameTime)) frameTime = 0.016;
         lastTime = timestamp;
 
-        if (timerStarted && !gameFinished) {
-            document.getElementById('time-val').innerText = formatTime(performance.now() - startTime);
+        if (timerStarted && !gameFinished && gameState !== 'PAUSED') {
+            document.getElementById('time-val').innerText = formatTime(performance.now() - startTime - totalPausedMs);
         }
 
         if (gameState === 'EXPLORING') updatePlayer(frameTime);
