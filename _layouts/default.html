@@ -20,25 +20,12 @@
 <!-- Google tag (gtag.js) --> <script async src="https://www.googletagmanager.com/gtag/js?id=G-SD1ZRQ75Y9"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-SD1ZRQ75Y9'); </script>
 <body>
 
-    <nav>
-      <a class="nav-emblem" href="{{ '/' | relative_url }}" aria-label="Home">
-        <img src="{{ '/assets/images/hover_emblem.png' | relative_url }}" alt="Blaine Bettencourt emblem">
-      </a>
-      <div class="nav-links">
-        <a href="{{ '/' | relative_url }}">Home</a>
-        <a href="{{ '/options' | relative_url }}">Options</a>
-        <a href="{{ '/contact' | relative_url }}">Contact</a>
-        <a href="{{ '/qwen' | relative_url }}">Test Layout</a>
-        <a href="{{ '/raycaster' | relative_url }}">Raycaster</a>
-      </div>
-    </nav>
+    {% include header.html %}
 
     <main>
         {{ content }} </main>
 
-    <footer>
-        &copy; 2026 Blaine Bettencourt. All rights reserved.
-    </footer>
+    {% include footer.html %}
 
 </body>
 </html>
