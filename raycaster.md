@@ -544,7 +544,7 @@ title: Secure Vault Breaker 3D
                     if (worldMap[y][x] > 0) {
                         let drawX = (x - player.x) * minimapZoom;
                         let drawY = -(y - player.y) * minimapZoom;
-                        mCtx.fillRect(drawX, drawY, minimapZoom + 0.5, minimapZoom + 0.5);
+                        mCtx.fillRect(drawX, drawY - minimapZoom, minimapZoom + 0.5, minimapZoom + 0.5);
                     }
                 }
             }
