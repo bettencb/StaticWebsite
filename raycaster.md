@@ -508,7 +508,7 @@ title: Secure Vault Breaker 3D
         if (gameState === 'EXPLORING') {
             let target = getFacedBlock();
             let prompt = document.getElementById('interaction-prompt');
-            if (worldMap[target.y][target.x] === 2) {
+            if (target.x >= 0 && target.x < mapWidth && target.y >= 0 && target.y < mapHeight && worldMap[target.y][target.x] === 2) {
                 let term = terminals[target.x + ',' + target.y];
                 if (term.hacked) {
                     prompt.innerText = "TERMINAL HACKED";
