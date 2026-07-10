@@ -194,8 +194,8 @@ title: Secure Vault Breaker 3D
     });
 
     function getFacedBlock() {
-        let checkX = Math.floor(player.x + player.dirX * 1.25);
-        let checkY = Math.floor(player.y + player.dirY * 1.25);
+        let checkX = Math.floor(player.x + player.dirX * 1.0);
+        let checkY = Math.floor(player.y + player.dirY * 1.0);
         return {x: checkX, y: checkY};
     }
 
