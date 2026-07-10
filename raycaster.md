@@ -52,6 +52,7 @@ title: Secure Vault Breaker 3D
     </div>
 </div>
 
+<script src="{{ '/assets/js/game-help.js' | relative_url }}"></script>
 <script>
     const canvas = document.getElementById('game-canvas');
     const ctx = canvas.getContext('2d', { alpha: false });
@@ -262,6 +263,12 @@ title: Secure Vault Breaker 3D
 
         const guessStr = document.getElementById('guessInput').value;
         const logArea = document.getElementById('logArea');
+
+        if (guessStr.trim().toLowerCase() === 'help') {
+            document.getElementById('guessInput').value = '';
+            showInGameHelp(logArea);
+            return;
+        }
 
         if (guessStr.length !== 4) {
             logArea.innerHTML += '<div class="log-entry" style="color:#ff3333;">[ERR] SEQUENCE MUST BE EXACTLY 4 DIGITS LONG.</div>';
