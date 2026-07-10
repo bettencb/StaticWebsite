@@ -54,6 +54,15 @@ title: Secure Vault Breaker 3D
 
 <script src="{{ '/assets/js/game-help.js' | relative_url }}"></script>
 <script>
+    /**
+     * Secure Vault Breaker 3D
+     * Copyright (c) 2026 bettencb (https://github.com/bettencb)
+     *
+     * Licensed under CC BY-NC 4.0.
+     * Free to use and modify with attribution. Commercial use prohibited.
+     * https://creativecommons.org/licenses/by-nc/4.0/
+     */
+
     const canvas = document.getElementById('game-canvas');
     const ctx = canvas.getContext('2d', { alpha: false });
 
@@ -103,6 +112,11 @@ title: Secure Vault Breaker 3D
         terminalHacked: document.createElement('canvas')
     };
 
+    /**
+     * Procedurally generates the three canvas-based textures used by the renderer:
+     * a brick-pattern wall, a green "TERMINAL" tile for unhacked terminals, and a
+     * red "HACKED" tile for already-compromised terminals.
+     */
     function generateTextures() {
         textures.wall.width = TEX_WIDTH; textures.wall.height = TEX_HEIGHT;
         let wCtx = textures.wall.getContext('2d');
@@ -132,6 +146,12 @@ title: Secure Vault Breaker 3D
         thCtx.strokeStyle = '#ff3333'; thCtx.strokeRect(2,2,TEX_WIDTH-4, TEX_HEIGHT-4);
     }
 
+    /**
+     * Builds the 20x20 world map from scratch. The outer ring is always solid
+     * wall; interior cells are randomly walled at ~15% density. Then randomly
+     * places 1-4 terminals (map value 2) away from the player spawn, each
+     * assigned a freshly generated 4-digit secret code. Calls updateHUD() when done.
+     */
     function initMap() {
         for (let y = 0; y < mapHeight; y++) {
             let row = [];
@@ -163,6 +183,10 @@ title: Secure Vault Breaker 3D
         updateHUD();
     }
 
+    /**
+     * Refreshes the on-screen HUD counter to show how many terminals are still
+     * unhacked out of the total (e.g. "2 / 3").
+     */
     function updateHUD() {
         document.getElementById('hud-terminals').innerText = (totalTerminals - hackedTerminals) + ' / ' + totalTerminals;
     }
@@ -194,12 +218,23 @@ title: Secure Vault Breaker 3D
         if (keys.hasOwnProperty(e.code)) keys[e.code] = false;
     });
 
+    /**
+     * Returns the map tile coordinates of the cell directly in front of the player,
+     * calculated by stepping one unit along the player's direction vector.
+     * @returns {{x: number, y: number}} Map grid coordinates of the faced tile.
+     */
     function getFacedBlock() {
         let checkX = Math.floor(player.x + player.dirX * 1.0);
         let checkY = Math.floor(player.y + player.dirY * 1.0);
         return {x: checkX, y: checkY};
     }
 
+    /**
+     * Places or removes a wall at the tile the player is currently facing.
+     * Ignores border tiles and terminal tiles (value 2) to prevent map corruption.
+     * Also prevents the player from walling themselves into their own tile.
+     * @param {boolean} build - true to place a wall, false to remove one.
+     */
     function editWorld(build) {
         let target = getFacedBlock();
         if (target.x <= 0 || target.x >= mapWidth - 1 || target.y <= 0 || target.y >= mapHeight - 1) return;
@@ -217,6 +252,10 @@ title: Secure Vault Breaker 3D
         }
     }
 
+    /**
+     * Triggered when the player presses E. Checks the tile directly in front of
+     * the player; if it is an unhacked terminal, opens the hacking overlay for it.
+     */
     function interact() {
         let target = getFacedBlock();
         if (worldMap[target.y][target.x] === 2) {
@@ -229,6 +268,14 @@ title: Secure Vault Breaker 3D
     let attemptsLeft = 10;
     let isGameOver = false;
 
+    /**
+     * Switches game state to TERMINAL and shows the hacking overlay for the given
+     * terminal. Resets the attempt counter to 10, clears any previous log entries,
+     * and focuses the guess input. Also clears movement keys so the player doesn't
+     * drift while the overlay is open.
+     * @param {{x: number, y: number, hacked: boolean, code: number[]}} terminalObj
+     *   The terminal object from the terminals map.
+     */
     function openTerminal(terminalObj) {
         currentTerminal = terminalObj;
         gameState = 'TERMINAL';
@@ -251,6 +298,10 @@ title: Secure Vault Breaker 3D
         keys.ArrowUp = keys.ArrowDown = keys.ArrowLeft = keys.ArrowRight = false;
     }
 
+    /**
+     * Hides the terminal overlay, clears the active terminal reference, and returns
+     * game state to EXPLORING. Refocuses the game canvas for keyboard input.
+     */
     function closeTerminal() {
         document.getElementById('terminal-overlay').style.display = 'none';
         gameState = 'EXPLORING';
@@ -258,6 +309,17 @@ title: Secure Vault Breaker 3D
         canvas.focus();
     }
 
+    /**
+     * Processes the player's current input in the hacking mini-game.
+     * - If the input is "help", delegates to showInGameHelp() without using an attempt.
+     * - Validates that the input is exactly 4 digits (0-9).
+     * - Computes Wordle-style per-digit feedback: green (right digit, right place),
+     *   yellow (right digit, wrong place), or red (wrong digit).
+     * - Decrements attemptsLeft and logs the result.
+     * - On a perfect match: marks the terminal as hacked, updates the HUD, and
+     *   triggers the victory screen if all terminals are cleared.
+     * - On zero attempts remaining: locks the terminal and reveals the correct code.
+     */
     function submitGuess() {
         if (isGameOver || !currentTerminal) return;
 
@@ -345,12 +407,21 @@ title: Secure Vault Breaker 3D
         if (!isGameOver) document.getElementById('guessInput').focus();
     }
 
+    /**
+     * Hides the terminal overlay and displays the victory overlay. Sets game state
+     * to VICTORY. Called automatically 1.5 s after the last terminal is hacked.
+     */
     function showVictoryScreen() {
         document.getElementById('terminal-overlay').style.display = 'none';
         document.getElementById('victory-overlay').style.display = 'flex';
         gameState = 'VICTORY';
     }
 
+    /**
+     * Pauses the game. Records the current timestamp so paused time can later be
+     * subtracted from the run timer. Clears held movement keys and shows the
+     * pause overlay (which includes the site navigation).
+     */
     function pauseGame() {
         gameState = 'PAUSED';
         pausedAt = performance.now();
@@ -358,6 +429,11 @@ title: Secure Vault Breaker 3D
         document.getElementById('pause-overlay').style.display = 'flex';
     }
 
+    /**
+     * Resumes a paused game. Adds the duration of the pause to totalPausedMs so
+     * the run timer stays accurate, then hides the pause overlay and returns to
+     * EXPLORING state.
+     */
     function resumeGame() {
         if (timerStarted && !gameFinished) {
             totalPausedMs += performance.now() - pausedAt;
@@ -367,12 +443,21 @@ title: Secure Vault Breaker 3D
         canvas.focus();
     }
 
+    /**
+     * Dismisses the victory overlay without resetting the game, letting the player
+     * continue exploring the already-cleared map. Returns state to EXPLORING.
+     */
     function closeVictory() {
         document.getElementById('victory-overlay').style.display = 'none';
         gameState = 'EXPLORING';
         canvas.focus();
     }
 
+    /**
+     * Fully resets all game state and starts a new run. Repositions the player at
+     * spawn, wipes the world map, clears all terminal data, resets the timer, and
+     * calls initMap() to generate a fresh map with new terminals and codes.
+     */
     function restartGame() {
         document.getElementById('victory-overlay').style.display = 'none';
         gameState = 'EXPLORING';
@@ -390,6 +475,11 @@ title: Secure Vault Breaker 3D
         canvas.focus();
     }
 
+    /**
+     * Converts a millisecond duration into a zero-padded MM:SS string.
+     * @param {number} ms - Duration in milliseconds.
+     * @returns {string} Formatted time string, e.g. "02:05".
+     */
     function formatTime(ms) {
         let totalSeconds = Math.floor(ms / 1000);
         let minutes = Math.floor(totalSeconds / 60);
@@ -399,6 +489,12 @@ title: Secure Vault Breaker 3D
 
     let lastTime = 0;
 
+    /**
+     * Main requestAnimationFrame loop. Computes the time delta since the last
+     * frame, updates the on-screen timer, calls updatePlayer() when exploring,
+     * then calls renderFrame() every frame regardless of state.
+     * @param {DOMHighResTimeStamp} timestamp - Time provided by rAF.
+     */
     function gameLoop(timestamp) {
         let frameTime = (timestamp - lastTime) / 1000.0;
         if (isNaN(frameTime)) frameTime = 0.016;
@@ -413,6 +509,14 @@ title: Secure Vault Breaker 3D
         requestAnimationFrame(gameLoop);
     }
 
+    /**
+     * Updates the player's position and facing direction based on currently held
+     * arrow keys. Movement is frame-rate independent via frameTime. Collision
+     * detection is done per axis so the player can slide along walls.
+     * Rotation is applied via 2D rotation matrix to both the direction vector
+     * and the camera plane vector.
+     * @param {number} frameTime - Seconds elapsed since the last frame.
+     */
     function updatePlayer(frameTime) {
         let moveStep = player.moveSpeed * frameTime;
         let rotStep = player.rotSpeed * frameTime;
@@ -443,6 +547,14 @@ title: Secure Vault Breaker 3D
         }
     }
 
+    /**
+     * Renders one complete frame to the game canvas using the DDA raycasting algorithm.
+     * For each vertical screen column a ray is cast from the player's position;
+     * the first wall hit determines the wall slice height and which texture column
+     * to sample. Side walls (Y-axis hits) receive an extra darkness overlay for
+     * depth cues. Also shows/hides the interaction prompt when a terminal is faced,
+     * then calls drawMinimap().
+     */
     function renderFrame() {
         ctx.fillStyle = '#222';
         ctx.fillRect(0, 0, screenWidth, screenHeight / 2);
@@ -533,6 +645,12 @@ title: Secure Vault Breaker 3D
         drawMinimap();
     }
 
+    /**
+     * Draws the player-centred minimap onto the minimap canvas. The map scrolls
+     * with the player; only tiles within a computed range are drawn. A green dot
+     * marks the player's position and a short line indicates their facing direction.
+     * The canvas is rotated so that "up" on the minimap matches the world's Y axis.
+     */
     function drawMinimap() {
         mCtx.clearRect(0, 0, minimapCanvas.width, minimapCanvas.height);
         mCtx.save();

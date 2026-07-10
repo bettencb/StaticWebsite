@@ -1,3 +1,16 @@
+/**
+ * Secure Vault Breaker 3D — Help Module
+ * Copyright (c) 2026 bettencb (https://github.com/bettencb)
+ *
+ * Licensed under CC BY-NC 4.0.
+ * Free to use and modify with attribution. Commercial use prohibited.
+ * https://creativecommons.org/licenses/by-nc/4.0/
+ */
+
+/**
+ * DevTools console command. Prints a styled table of game controls and
+ * mechanics to the browser console. Invoke by typing help() in DevTools.
+ */
 window.help = function() {
     console.log('%c╔══════════════════════════════════════════╗', 'color:#ffd700;');
     console.log('%c  SECURE VAULT BREAKER 3D  —  HELP         ', 'color:#ffd700; font-weight:bold; font-size:14px;');
@@ -13,6 +26,11 @@ window.help = function() {
     console.log('%cIN-GAME    %cType "help" in the guess box for in-terminal tips.', 'color:#33ff33; font-weight:bold;', 'color:#ccc;');
 };
 
+/**
+ * Appends a formatted block of game instructions to the in-terminal log area.
+ * Called when the player types "help" into the terminal guess input.
+ * @param {HTMLElement} logArea - The log area element inside the terminal overlay.
+ */
 function showInGameHelp(logArea) {
     logArea.innerHTML +=
         '<div class="log-entry" style="color:#ffd700; margin-top:10px;">[HELP] ---- GAME INSTRUCTIONS ----</div>' +
