@@ -85,7 +85,7 @@ title: Secure Vault Breaker 3D
 
     const player = {
         x: 2.5, y: 2.5,
-        dirX: 1.0, dirY: 0.0,
+        dirX: -1.0, dirY: 0.0,
         planeX: 0.0, planeY: 0.66,
         moveSpeed: 4.0, rotSpeed: 3.0
     };
@@ -370,7 +370,7 @@ title: Secure Vault Breaker 3D
         document.getElementById('victory-overlay').style.display = 'none';
         gameState = 'EXPLORING';
         player.x = 2.5; player.y = 2.5;
-        player.dirX = 1.0; player.dirY = 0.0;
+        player.dirX = -1.0; player.dirY = 0.0;
         player.planeX = 0.0; player.planeY = 0.66;
         worldMap = [];
         terminals = {};
@@ -559,7 +559,7 @@ title: Secure Vault Breaker 3D
         mCtx.lineWidth = 2;
         mCtx.beginPath();
         mCtx.moveTo(0, 0);
-        mCtx.lineTo(player.dirX * 10, player.dirY * 10);
+        mCtx.lineTo(player.dirX * 10, -player.dirY * 10);
         mCtx.stroke();
 
         mCtx.restore();
