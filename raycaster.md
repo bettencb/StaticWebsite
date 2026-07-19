@@ -12,16 +12,16 @@ title: Secure Vault Breaker 3D
 
 <div id="terminal-overlay">
     <div class="widget-container">
-        <h2>&#128272; SECURE VAULT BREAKER</h2>
-        <div class="dashboard">
+        <h2 id="term-title">&#128272; SECURE VAULT BREAKER</h2>
+        <div class="dashboard" id="term-dashboard">
             <div><strong>Status:</strong> <span id="term-status">&#128994; Online - Awaiting Input</span></div>
             <div><strong>Target:</strong> 4-Digit Sequence</div>
             <div><strong>Valid Characters:</strong> Digits 0 through 9</div>
             <div><strong>Firewall Limit:</strong> <span id="term-attempts">10</span> Attempts Remaining</div>
         </div>
-        <div class="input-area">
+        <div class="input-area" id="term-input-area">
             <input type="text" id="guessInput" maxlength="4" placeholder="____" autocomplete="off">
-            <button class="btn" id="submitBtn" onclick="submitGuess()">HACK</button>
+            <button class="btn" id="submitBtn" onclick="submitCodebreaker()">HACK</button>
             <button class="btn btn-exit" onclick="closeTerminal()">QUIT [Q]</button>
         </div>
         <div class="log-area" id="logArea"></div>
@@ -209,8 +209,15 @@ title: Secure Vault Breaker 3D
             }
             if (e.code === 'KeyE') interact();
         } else if (gameState === 'TERMINAL') {
-            if (e.code === 'KeyQ') closeTerminal();
-            if (e.code === 'Enter') submitGuess();
+            if (e.code === 'KeyQ') { closeTerminal(); return; }
+            if (currentMode === 'codebreaker') {
+                if (e.code === 'Enter') submitCodebreaker();
+            } else if (currentMode === 'extraction') {
+                if (e.code === 'ArrowUp')    { e.preventDefault(); handleExtractionMove(0, -1); }
+                if (e.code === 'ArrowDown')  { e.preventDefault(); handleExtractionMove(0, 1); }
+                if (e.code === 'ArrowLeft')  { e.preventDefault(); handleExtractionMove(-1, 0); }
+                if (e.code === 'ArrowRight') { e.preventDefault(); handleExtractionMove(1, 0); }
+            }
         }
     });
 
@@ -267,35 +274,68 @@ title: Secure Vault Breaker 3D
     let currentTerminal = null;
     let attemptsLeft = 10;
     let isGameOver = false;
+    let currentMode = 'codebreaker';
+    let exState = null;
 
-    /**
-     * Switches game state to TERMINAL and shows the hacking overlay for the given
-     * terminal. Resets the attempt counter to 10, clears any previous log entries,
-     * and focuses the guess input. Also clears movement keys so the player doesn't
-     * drift while the overlay is open.
-     * @param {{x: number, y: number, hacked: boolean, code: number[]}} terminalObj
-     *   The terminal object from the terminals map.
-     */
     function openTerminal(terminalObj) {
         currentTerminal = terminalObj;
         gameState = 'TERMINAL';
-        attemptsLeft = 10;
         isGameOver = false;
-
+        keys.ArrowUp = keys.ArrowDown = keys.ArrowLeft = keys.ArrowRight = false;
+        currentMode = Math.random() < 0.5 ? 'codebreaker' : 'extraction';
         document.getElementById('terminal-overlay').style.display = 'flex';
-        document.getElementById('term-attempts').innerText = attemptsLeft;
-        document.getElementById('term-status').innerText = "\u{1F7E2} Online - Awaiting Input";
-        document.getElementById('term-status').style.color = "#33ff33";
-        document.getElementById('guessInput').value = '';
-        document.getElementById('guessInput').disabled = false;
-        document.getElementById('submitBtn').disabled = false;
+        if (currentMode === 'codebreaker') {
+            setupCodebreaker();
+        } else {
+            setupExtraction();
+        }
+    }
+
+    function setupCodebreaker() {
+        attemptsLeft = 10;
+        document.getElementById('term-title').innerText = '\u{1F512} SECURE VAULT BREAKER';
+        document.getElementById('term-dashboard').innerHTML =
+            '<div><strong>Status:</strong> <span id="term-status">\u{1F7E2} Online - Awaiting Input</span></div>' +
+            '<div><strong>Target:</strong> 4-Digit Sequence</div>' +
+            '<div><strong>Valid Characters:</strong> Digits 0 through 9</div>' +
+            '<div><strong>Firewall Limit:</strong> <span id="term-attempts">10</span> Attempts Remaining</div>';
+        document.getElementById('term-input-area').innerHTML =
+            '<input type="text" id="guessInput" maxlength="4" placeholder="____" autocomplete="off">' +
+            '<button class="btn" id="submitBtn" onclick="submitCodebreaker()">HACK</button>' +
+            '<button class="btn btn-exit" onclick="closeTerminal()">QUIT [Q]</button>';
         document.getElementById('logArea').innerHTML =
             '<div class="log-entry">[SYS] Terminal connection established.</div>' +
             '<div class="log-entry">[SYS] Target encrypted. Digits 0-9 required.</div>' +
             '<div class="log-entry">[SYS] Awaiting input...</div>';
-
         setTimeout(function() { document.getElementById('guessInput').focus(); }, 50);
-        keys.ArrowUp = keys.ArrowDown = keys.ArrowLeft = keys.ArrowRight = false;
+    }
+
+    function setupExtraction() {
+        exState = { px: 0, py: 0, dx: 0, dy: 2, ddir: 1, hasCore: false, turnsLeft: 10, gameOver: false };
+        document.getElementById('term-title').innerText = '\u{1F4E1} DATA EXTRACTION';
+        document.getElementById('term-dashboard').innerHTML =
+            '<div><strong>Status:</strong> <span id="term-status">\u{1F7E2} Grid Active - Plan Your Route</span></div>' +
+            '<div><strong>Turns Remaining:</strong> <span id="term-attempts">10</span></div>' +
+            '<div><strong>Objective:</strong> Reach <span style="color:#ffcc00">[C]</span> then <span style="color:#00ff88">[X]</span></div>' +
+            '<div><strong>Drone [D]:</strong> Row 3, bounces left \u2194 right each turn</div>';
+        document.getElementById('term-input-area').innerHTML =
+            '<div id="ext-board-wrap" style="width:100%">' +
+                '<div class="ext-grid" id="ext-grid"></div>' +
+                '<div class="ext-controls">' +
+                    '<div></div>' +
+                    '<button class="btn" onclick="handleExtractionMove(0,-1)">\u25B2</button>' +
+                    '<div></div>' +
+                    '<button class="btn" onclick="handleExtractionMove(-1,0)">\u25C4</button>' +
+                    '<button class="btn" onclick="handleExtractionMove(0,1)">\u25BC</button>' +
+                    '<button class="btn" onclick="handleExtractionMove(1,0)">\u25BA</button>' +
+                '</div>' +
+            '</div>';
+        document.getElementById('logArea').innerHTML =
+            '<div class="log-entry">[SYS] Data extraction protocol initiated.</div>' +
+            '<div class="log-entry">[SYS] Navigate [P] to [C] core, then reach [X] exit.</div>' +
+            '<div class="log-entry">[SYS] Avoid [D] drone \u2014 it bounces on row 3 each turn.</div>' +
+            '<div class="log-entry">[SYS] Use arrow keys or buttons. Q to abort.</div>';
+        renderExtractionBoard();
     }
 
     /**
@@ -306,21 +346,11 @@ title: Secure Vault Breaker 3D
         document.getElementById('terminal-overlay').style.display = 'none';
         gameState = 'EXPLORING';
         currentTerminal = null;
+        exState = null;
         canvas.focus();
     }
 
-    /**
-     * Processes the player's current input in the hacking mini-game.
-     * - If the input is "help", delegates to showInGameHelp() without using an attempt.
-     * - Validates that the input is exactly 4 digits (0-9).
-     * - Computes Wordle-style per-digit feedback: green (right digit, right place),
-     *   yellow (right digit, wrong place), or red (wrong digit).
-     * - Decrements attemptsLeft and logs the result.
-     * - On a perfect match: marks the terminal as hacked, updates the HUD, and
-     *   triggers the victory screen if all terminals are cleared.
-     * - On zero attempts remaining: locks the terminal and reveals the correct code.
-     */
-    function submitGuess() {
+    function submitCodebreaker() {
         if (isGameOver || !currentTerminal) return;
 
         const guessStr = document.getElementById('guessInput').value;
@@ -375,22 +405,13 @@ title: Secure Vault Breaker 3D
 
         if (feedback.every(function(f) { return f === '\u{1F7E2}'; })) {
             isGameOver = true;
-            currentTerminal.hacked = true;
-            hackedTerminals++;
-            updateHUD();
             document.getElementById('term-status').innerText = "\u{1F7E2} SYSTEM BYPASSED";
             document.getElementById('guessInput').disabled = true;
             document.getElementById('submitBtn').disabled = true;
             logArea.innerHTML +=
                 '<div class="log-entry" style="color:#33ff33; font-weight:bold; margin-top:15px;">[SUCCESS] Perfect match detected.</div>' +
                 '<div class="log-entry">[SUCCESS] Decryption successful. Terminal unlocked.</div>';
-
-            if (hackedTerminals >= totalTerminals) {
-                gameFinished = true;
-                document.getElementById('final-time').innerText = formatTime(performance.now() - startTime - totalPausedMs);
-                logArea.innerHTML += '<div class="log-entry" style="color:#ffd700; font-size:1.2em; margin-top:15px; font-weight:bold;">[!] ALL TERMINALS HACKED. MISSION ACCOMPLISHED.</div>';
-                setTimeout(showVictoryScreen, 1500);
-            }
+            completeTerminalHack(logArea);
         } else if (attemptsLeft === 0) {
             isGameOver = true;
             document.getElementById('term-status').innerText = "\u{1F534} ACCESS DENIED";
@@ -405,6 +426,138 @@ title: Secure Vault Breaker 3D
 
         logArea.scrollTop = logArea.scrollHeight;
         if (!isGameOver) document.getElementById('guessInput').focus();
+    }
+
+    function completeTerminalHack(logArea) {
+        currentTerminal.hacked = true;
+        hackedTerminals++;
+        updateHUD();
+        if (hackedTerminals >= totalTerminals) {
+            gameFinished = true;
+            document.getElementById('final-time').innerText = formatTime(performance.now() - startTime - totalPausedMs);
+            logArea.innerHTML += '<div class="log-entry" style="color:#ffd700; font-size:1.2em; margin-top:15px; font-weight:bold;">[!] ALL TERMINALS HACKED. MISSION ACCOMPLISHED.</div>';
+            setTimeout(showVictoryScreen, 1500);
+        }
+    }
+
+    function handleExtractionMove(dx, dy) {
+        if (!exState || exState.gameOver) return;
+        const logArea = document.getElementById('logArea');
+        const newX = exState.px + dx;
+        const newY = exState.py + dy;
+
+        if (newX < 0 || newX > 4 || newY < 0 || newY > 4) {
+            logArea.innerHTML += '<div class="log-entry" style="color:#ff3333;">[ERR] Out of bounds. Choose another direction.</div>';
+            logArea.scrollTop = logArea.scrollHeight;
+            return;
+        }
+
+        exState.px = newX;
+        exState.py = newY;
+
+        if (!exState.hasCore && exState.px === 2 && exState.py === 2) {
+            exState.hasCore = true;
+            logArea.innerHTML += '<div class="log-entry" style="color:#ffcc00;">[DATA] Core package acquired. Reach the exit!</div>';
+            document.getElementById('term-status').innerText = '\u{1F7E1} Core Acquired \u2014 Reach Exit';
+            document.getElementById('term-status').style.color = '#ffcc00';
+        }
+
+        exState.dx += exState.ddir;
+        if (exState.dx === 0 || exState.dx === 4) exState.ddir *= -1;
+
+        if (exState.px === exState.dx && exState.py === exState.dy) {
+            exState.gameOver = true;
+            renderExtractionBoard();
+            document.getElementById('term-status').innerText = '\u{1F534} INTERCEPTED';
+            document.getElementById('term-status').style.color = '#ff3333';
+            logArea.innerHTML +=
+                '<div class="log-entry" style="color:#ff3333; font-weight:bold; margin-top:10px;">[CRITICAL] Drone interception. Route compromised.</div>' +
+                '<div class="log-entry" style="color:#ff3333;">[CRITICAL] Exit and re-engage to restart extraction.</div>';
+            document.querySelectorAll('.ext-controls .btn').forEach(function(b) { b.disabled = true; });
+            logArea.scrollTop = logArea.scrollHeight;
+            return;
+        }
+
+        if (exState.px === 4 && exState.py === 4) {
+            if (exState.hasCore) {
+                exState.gameOver = true;
+                renderExtractionBoard();
+                document.getElementById('term-status').innerText = '\u{1F7E2} EXTRACTION COMPLETE';
+                document.getElementById('term-status').style.color = '#33ff33';
+                logArea.innerHTML +=
+                    '<div class="log-entry" style="color:#33ff33; font-weight:bold; margin-top:10px;">[SUCCESS] Data core extracted. Terminal access granted.</div>';
+                document.querySelectorAll('.ext-controls .btn').forEach(function(b) { b.disabled = true; });
+                completeTerminalHack(logArea);
+                logArea.scrollTop = logArea.scrollHeight;
+                return;
+            } else {
+                exState.gameOver = true;
+                renderExtractionBoard();
+                document.getElementById('term-status').innerText = '\u{1F534} EXTRACTION FAILED';
+                document.getElementById('term-status').style.color = '#ff3333';
+                logArea.innerHTML +=
+                    '<div class="log-entry" style="color:#ff3333; font-weight:bold; margin-top:10px;">[CRITICAL] Exit reached without core. Mission failed.</div>' +
+                    '<div class="log-entry" style="color:#ff3333;">[CRITICAL] Exit and re-engage to restart extraction.</div>';
+                document.querySelectorAll('.ext-controls .btn').forEach(function(b) { b.disabled = true; });
+                logArea.scrollTop = logArea.scrollHeight;
+                return;
+            }
+        }
+
+        exState.turnsLeft--;
+        if (exState.turnsLeft <= 0) {
+            exState.gameOver = true;
+            renderExtractionBoard();
+            document.getElementById('term-status').innerText = '\u{1F534} TIME OUT';
+            document.getElementById('term-status').style.color = '#ff3333';
+            logArea.innerHTML +=
+                '<div class="log-entry" style="color:#ff3333; font-weight:bold; margin-top:10px;">[CRITICAL] Turn limit exceeded. Extraction failed.</div>' +
+                '<div class="log-entry" style="color:#ff3333;">[CRITICAL] Exit and re-engage to restart extraction.</div>';
+            document.querySelectorAll('.ext-controls .btn').forEach(function(b) { b.disabled = true; });
+            logArea.scrollTop = logArea.scrollHeight;
+            return;
+        }
+
+        renderExtractionBoard();
+        logArea.scrollTop = logArea.scrollHeight;
+    }
+
+    function renderExtractionBoard() {
+        if (!exState) return;
+        const grid = document.getElementById('ext-grid');
+        if (!grid) return;
+        grid.innerHTML = '';
+        for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 5; col++) {
+                const cell = document.createElement('div');
+                cell.className = 'ext-cell';
+                const isPlayer = (col === exState.px && row === exState.py);
+                const isDrone  = (col === exState.dx && row === exState.dy);
+                const isCore   = (!exState.hasCore && col === 2 && row === 2);
+                const isExit   = (col === 4 && row === 4);
+                if (isPlayer && isDrone) {
+                    cell.classList.add('ec-overlap');
+                    cell.innerText = '!!';
+                } else if (isPlayer) {
+                    cell.classList.add(exState.hasCore ? 'ec-core' : 'ec-player');
+                    cell.innerText = exState.hasCore ? 'P+C' : 'P';
+                } else if (isDrone) {
+                    cell.classList.add('ec-drone');
+                    cell.innerText = 'D';
+                } else if (isCore) {
+                    cell.classList.add('ec-core');
+                    cell.innerText = 'C';
+                } else if (isExit) {
+                    cell.classList.add('ec-exit');
+                    cell.innerText = 'X';
+                } else {
+                    cell.classList.add('ec-empty');
+                    cell.innerText = '';
+                }
+                grid.appendChild(cell);
+            }
+        }
+        document.getElementById('term-attempts').innerText = exState.turnsLeft;
     }
 
     /**
