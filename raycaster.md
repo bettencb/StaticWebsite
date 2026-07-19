@@ -311,13 +311,52 @@ title: Secure Vault Breaker 3D
     }
 
     function setupExtraction() {
-        exState = { px: 0, py: 0, dx: 0, dy: 2, ddir: 1, hasCore: false, turnsLeft: 10, gameOver: false };
+        const EXIT_X = 4, EXIT_Y = 4;
+
+        let px, py;
+        do {
+            px = Math.floor(Math.random() * 5);
+            py = Math.floor(Math.random() * 5);
+        } while (px === EXIT_X && py === EXIT_Y);
+
+        let cx, cy;
+        do {
+            cx = Math.floor(Math.random() * 5);
+            cy = Math.floor(Math.random() * 5);
+        } while ((cx === px && cy === py) || (cx === EXIT_X && cy === EXIT_Y));
+
+        let dx, dy;
+        do {
+            dx = Math.floor(Math.random() * 5);
+            dy = Math.floor(Math.random() * 5);
+        } while ((dx === px && dy === py) || (dx === cx && dy === cy) || (dx === EXIT_X && dy === EXIT_Y));
+
+        const daxis = Math.random() < 0.5 ? 'h' : 'v';
+        let ddir;
+        if (daxis === 'h') {
+            if (dx === 0) ddir = 1;
+            else if (dx === 4) ddir = -1;
+            else ddir = Math.random() < 0.5 ? 1 : -1;
+        } else {
+            if (dy === 0) ddir = 1;
+            else if (dy === 4) ddir = -1;
+            else ddir = Math.random() < 0.5 ? 1 : -1;
+        }
+
+        exState = { px, py, cx, cy, dx, dy, daxis, ddir, hasCore: false, turnsLeft: 10, gameOver: false };
+
+        const droneLabel = daxis === 'h'
+            ? 'Row ' + (dy + 1) + ', bounces left \u2194 right each turn'
+            : 'Col ' + (dx + 1) + ', bounces up \u2195 down each turn';
+        const droneLog = daxis === 'h'
+            ? 'it bounces on row ' + (dy + 1) + ' each turn'
+            : 'it bounces on col ' + (dx + 1) + ' each turn';
         document.getElementById('term-title').innerText = '\u{1F4E1} DATA EXTRACTION';
         document.getElementById('term-dashboard').innerHTML =
             '<div><strong>Status:</strong> <span id="term-status">\u{1F7E2} Grid Active - Plan Your Route</span></div>' +
             '<div><strong>Turns Remaining:</strong> <span id="term-attempts">10</span></div>' +
             '<div><strong>Objective:</strong> Reach <span style="color:#ffcc00">[C]</span> then <span style="color:#00ff88">[X]</span></div>' +
-            '<div><strong>Drone [D]:</strong> Row 3, bounces left \u2194 right each turn</div>';
+            '<div><strong>Drone [D]:</strong> ' + droneLabel + '</div>';
         document.getElementById('term-input-area').innerHTML =
             '<div id="ext-board-wrap" style="width:100%">' +
                 '<div class="ext-grid" id="ext-grid"></div>' +
@@ -333,7 +372,7 @@ title: Secure Vault Breaker 3D
         document.getElementById('logArea').innerHTML =
             '<div class="log-entry">[SYS] Data extraction protocol initiated.</div>' +
             '<div class="log-entry">[SYS] Navigate [P] to [C] core, then reach [X] exit.</div>' +
-            '<div class="log-entry">[SYS] Avoid [D] drone \u2014 it bounces on row 3 each turn.</div>' +
+            '<div class="log-entry">[SYS] Avoid [D] drone \u2014 ' + droneLog + '.</div>' +
             '<div class="log-entry">[SYS] Use arrow keys or buttons. Q to abort.</div>';
         renderExtractionBoard();
     }
@@ -455,15 +494,20 @@ title: Secure Vault Breaker 3D
         exState.px = newX;
         exState.py = newY;
 
-        if (!exState.hasCore && exState.px === 2 && exState.py === 2) {
+        if (!exState.hasCore && exState.px === exState.cx && exState.py === exState.cy) {
             exState.hasCore = true;
             logArea.innerHTML += '<div class="log-entry" style="color:#ffcc00;">[DATA] Core package acquired. Reach the exit!</div>';
             document.getElementById('term-status').innerText = '\u{1F7E1} Core Acquired \u2014 Reach Exit';
             document.getElementById('term-status').style.color = '#ffcc00';
         }
 
-        exState.dx += exState.ddir;
-        if (exState.dx === 0 || exState.dx === 4) exState.ddir *= -1;
+        if (exState.daxis === 'h') {
+            exState.dx += exState.ddir;
+            if (exState.dx === 0 || exState.dx === 4) exState.ddir *= -1;
+        } else {
+            exState.dy += exState.ddir;
+            if (exState.dy === 0 || exState.dy === 4) exState.ddir *= -1;
+        }
 
         if (exState.px === exState.dx && exState.py === exState.dy) {
             exState.gameOver = true;
@@ -533,7 +577,7 @@ title: Secure Vault Breaker 3D
                 cell.className = 'ext-cell';
                 const isPlayer = (col === exState.px && row === exState.py);
                 const isDrone  = (col === exState.dx && row === exState.dy);
-                const isCore   = (!exState.hasCore && col === 2 && row === 2);
+                const isCore   = (!exState.hasCore && col === exState.cx && row === exState.cy);
                 const isExit   = (col === 4 && row === 4);
                 if (isPlayer && isDrone) {
                     cell.classList.add('ec-overlap');
