@@ -13,7 +13,7 @@ You're a hacker dropped into a procedurally generated 3D facility. Find and crac
 ### Controls
 
 | Key | Action |
-|---|---|
+| --- | --- |
 | `↑` / `↓` | Walk forward / backward |
 | `←` / `→` | Turn left / right |
 | `E` | Interact with a terminal |
@@ -29,7 +29,7 @@ When you open a terminal you have **10 attempts** to guess its 4-digit code (dig
 After each guess you get per-digit feedback:
 
 | Symbol | Meaning |
-|---|---|
+| --- | --- |
 | 🟢 | Right digit, right position |
 | 🟡 | Right digit, wrong position |
 | 🔴 | Wrong digit |
